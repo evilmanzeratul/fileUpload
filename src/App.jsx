@@ -15,7 +15,11 @@ function App() {
     if (!imageUpload) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
     try {
-      await uploadBytes(imageRef, imageUpload)
+      const image = await uploadBytes(imageRef, imageUpload)
+      const url = await getDownloadURL(image.ref)
+      setImageList((prev) => {
+        return [...prev, url]
+      })
       alert("Image Uploaded")
     } catch (err) {
       console.error(err)
@@ -30,7 +34,6 @@ function App() {
         const url = await getDownloadURL(item)
         setImageList((prev) => [...prev, url])
       });
-      console.log(imageList);
     } catch (err) {
       console.error(err);
     }
@@ -48,7 +51,6 @@ function App() {
   //   });
   // }, []);
 
-  console.log(imageList)
 
   return (
     <div className="App">
